@@ -1,0 +1,48 @@
+package hernandez.lorena.appnotes
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import hernandez.lorena.appnotes.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var db: NotesDatabaseHelper
+    private lateinit var notesAdapter: NotesAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        db = NotesDatabaseHelper(this)
+        notesAdapter = NotesAdapter(this, db.getAllNotes().toMutableList())
+
+        binding.notesRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.notesRecyclerView.adapter = notesAdapter
+
+        binding.addButton.setOnClickListener {
+            val intent = Intent(this, AddNoteActivity::class.java)
+            startActivity(intent)
+        }
+
+        enableEdgeToEdge()
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        notesAdapter.refreshData(db.getAllNotes()) // Llamado a refreshData para actualizar la lista
+    }
+}

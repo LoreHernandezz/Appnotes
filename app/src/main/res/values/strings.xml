@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Appnotes</string>
+    <string name="add_button_description">Agregar nuevo elemento</string>
+    <string name="add_note_heading">Añadir nota</string>
+    <string name="save_button_description">Botón para guardar la nota</string>
+    <string name="add_titulo">Introduce el título</string>
+    <string name="add_descripcion">Introduce la descripción</string>
+
+</resources>
