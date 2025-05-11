@@ -14,10 +14,13 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         private const val COLUMN_ID = "id"
         private const val COLUMN_TITLE = "title"
         private const val COLUMN_CONTENT = "content"
+        private const val COLUMN_DATE = "date"
+        private const val COLUMN_CATEGORY = "category"
+        private const val COLUMN_FAVORITE = "is_favorite"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
+        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT, $COLUMN_DATE TEXT, $COLUMN_CATEGORY TEXT, $COLUMN_FAVORITE INTEGER)"
         db?.execSQL(createTableQuery)
     }
 
@@ -32,6 +35,9 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         val values = ContentValues().apply {
             put(COLUMN_TITLE, note.title)
             put(COLUMN_CONTENT, note.content)
+            put(COLUMN_DATE, note.date)
+            put(COLUMN_CATEGORY, note.category)
+            put(COLUMN_FAVORITE, if (note.isFavorite) 1 else 0)
         }
         db.insert(TABLE_NAME, null, values)
         db.close()
@@ -47,8 +53,11 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
             val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
             val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
+            val date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE))
+            val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
+            val isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
 
-            val note = Note(id, title, content)
+            val note = Note(id, title, content, date, category, isFavorite)
             notesList.add(note)
         }
         cursor.close()
@@ -68,6 +77,9 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         val values = ContentValues().apply {
             put(COLUMN_TITLE, note.title)
             put(COLUMN_CONTENT, note.content)
+            put(COLUMN_DATE, note.date)
+            put(COLUMN_CATEGORY, note.category)
+            put(COLUMN_FAVORITE, if (note.isFavorite) 1 else 0)
         }
         val whereClause = "$COLUMN_ID = ?"
         val whereArgs = arrayOf(note.id.toString())
@@ -86,7 +98,10 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
             val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
             val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
-            note = Note(id, title, content)
+            val date = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE))
+            val category = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CATEGORY))
+            val isFavorite = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FAVORITE)) == 1
+            note = Note(id, title, content, date, category, isFavorite)
         }
         cursor.close()
         db.close()

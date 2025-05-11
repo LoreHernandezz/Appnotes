@@ -1,1 +1,9 @@
-Actulización, edita, elimina y agrega notas dentro de una base de datos local
+Actualizaciones
+
+- Edita, elimina y agrega notas dentro de una base de datos local
+- Filtro de búsqueda
+- Ordenamiento alfabético
+- Se agregaron nuevos parámetros de la base de datos
+
+
+

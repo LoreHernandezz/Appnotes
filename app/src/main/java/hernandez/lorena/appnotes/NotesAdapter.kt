@@ -38,6 +38,18 @@ class NotesAdapter(private val context: Context, private var noteList: MutableLi
             context.startActivity(intent)
         }
 
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, NoteDetailActivity::class.java).apply {
+                putExtra("note_title", note.title)
+                putExtra("note_content", note.content)
+                putExtra("note_date", note.date)
+                putExtra("note_category", note.category)
+                putExtra("note_favorite", note.isFavorite)
+            }
+            context.startActivity(intent)
+        }
+
+
         holder.btnDelete.setOnClickListener {
             val builder = android.app.AlertDialog.Builder(context)
             builder.setTitle("Eliminar nota")
@@ -50,14 +62,11 @@ class NotesAdapter(private val context: Context, private var noteList: MutableLi
                 notifyItemRemoved(position)
                 dialog.dismiss()
             }
-
             builder.setNegativeButton("Cancelar") { dialog, _ ->
                 dialog.dismiss()
             }
-
             builder.create().show()
         }
-
 
     }
 
@@ -69,5 +78,12 @@ class NotesAdapter(private val context: Context, private var noteList: MutableLi
         noteList = newNotes.toMutableList()
         notifyDataSetChanged()
     }
+
+
+    fun updateList(newList: List<Note>) {
+        noteList = newList.toMutableList()
+        notifyDataSetChanged()
+    }
+
 
 }
