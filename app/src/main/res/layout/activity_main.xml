@@ -29,6 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
     <ImageButton
         android:id="@+id/btnSortAZ"
         android:layout_width="59dp"
@@ -43,6 +44,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/soft_purple" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/foldersRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toBottomOf="@id/etSearch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp" />
+
+
     <TextView
         android:id="@+id/notesHeading"
         android:layout_width="wrap_content"
@@ -52,7 +67,7 @@
         android:textSize="16sp"
         android:textColor="@color/soft_purple"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etSearch" />
+        app:layout_constraintTop_toBottomOf="@+id/foldersRecyclerView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notesRecyclerView"

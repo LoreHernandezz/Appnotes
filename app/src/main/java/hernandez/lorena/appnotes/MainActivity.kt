@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import hernandez.lorena.appnotes.databinding.ActivityMainBinding
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -20,10 +20,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var allNotes: MutableList<Note>
     private var isAscending = true
 
+    // Hacer categories y foldersAdapter propiedades globales
+    private val categories = listOf("Escuela", "Trabajo", "Personal", "Otra")
+    private lateinit var foldersAdapter: FoldersAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -31,24 +33,39 @@ class MainActivity : AppCompatActivity() {
         allNotes = db.getAllNotes().toMutableList()
         notesAdapter = NotesAdapter(this, allNotes)
 
-
         binding.notesRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.notesRecyclerView.adapter = notesAdapter
+
+        // Recyclerview de carpetas
+        val foldersRecyclerView = findViewById<RecyclerView>(R.id.foldersRecyclerView)
+        foldersRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        // Inicializar foldersAdapter
+        val folderList = categories.map { category ->
+            val count = allNotes.count { it.category == category }
+            Folder(category, count)
+        }
+
+        foldersAdapter = FoldersAdapter(folderList) { selectedFolder ->
+            val category = selectedFolder.name
+            val intent = Intent(this, NotesByCategoryActivity::class.java)
+            intent.putExtra("category", category)
+            startActivity(intent)
+        }
+
+        foldersRecyclerView.adapter = foldersAdapter
 
         binding.addButton.setOnClickListener {
             val intent = Intent(this, AddNoteActivity::class.java)
             startActivity(intent)
-
         }
 
         binding.calendarButton.setOnClickListener {
             val intent = Intent(this, CalendarActivity::class.java)
             startActivity(intent)
-
         }
 
         val sortButton = findViewById<ImageButton>(R.id.btnSortAZ)
-
         sortButton.setOnClickListener {
             isAscending = !isAscending
             sortNotes()
@@ -77,9 +94,38 @@ class MainActivity : AppCompatActivity() {
             insets
         }
     }
+
     override fun onResume() {
         super.onResume()
+
+        // Recalcular todas las notas
         allNotes = db.getAllNotes().toMutableList()
+        notesAdapter.refreshData(allNotes)  // Actualiza el adaptador de notas con la nueva lista de notas
+
+        // Recalcular las carpetas
+        val folderList = categories.map { category ->
+            val count = allNotes.count { it.category == category }
+            Folder(category, count)
+        }
+
+        // Actualizar el adaptador de carpetas y notificar que los datos han cambiado
+        foldersAdapter.updateFolderList(folderList)
+    }
+
+    private fun deleteNote(note: Note) {
+        db.deleteNote(note.id)  // Eliminar la nota de la base de datos
+        allNotes.remove(note)   // Eliminar la nota de la lista de notas
+
+        // Actualizar las carpetas después de la eliminación
+        val folderList = categories.map { category ->
+            val count = allNotes.count { it.category == category }
+            Folder(category, count)
+        }
+
+        // Actualizar el adaptador de carpetas con la nueva lista
+        foldersAdapter.updateFolderList(folderList)
+
+        // Actualizar el adaptador de notas
         notesAdapter.refreshData(allNotes)
     }
 
