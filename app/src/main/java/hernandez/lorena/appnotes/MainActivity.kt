@@ -41,6 +41,12 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.calendarButton.setOnClickListener {
+            val intent = Intent(this, CalendarActivity::class.java)
+            startActivity(intent)
+
+        }
+
         val sortButton = findViewById<ImageButton>(R.id.btnSortAZ)
 
         sortButton.setOnClickListener {

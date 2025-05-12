@@ -4,6 +4,7 @@ Actualizaciones
 - Filtro de búsqueda
 - Ordenamiento alfabético
 - Se agregaron nuevos parámetros de la base de datos
+- Se agregó la función de vista de calendario
 
 
 

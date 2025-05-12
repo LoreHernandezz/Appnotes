@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class NotesAdapter(private val context: Context, private var noteList: MutableList<Note>) :
+
     RecyclerView.Adapter<NotesAdapter.NoteViewHolder>() {
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -68,6 +69,11 @@ class NotesAdapter(private val context: Context, private var noteList: MutableLi
             builder.create().show()
         }
 
+    }
+
+    fun updateNotes(newNotes: List<Note>) {
+        this.noteList = newNotes.toMutableList()
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
