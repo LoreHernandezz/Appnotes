@@ -22,7 +22,9 @@
         android:id="@+id/categoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notas por categoría"
+        android:text="Categoría: "
+        android:fontFamily="@font/sourgummy_medium"
+        android:textColor="@color/soft_purple"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_below="@id/btnCancel"
@@ -32,6 +34,7 @@
         android:id="@+id/notesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/categoryTitle" />  <!-- Coloca el RecyclerView debajo del título -->
+        android:fontFamily="@font/delius_regular"
+        android:layout_below="@id/categoryTitle" />
 
 </RelativeLayout>

@@ -43,6 +43,6 @@ class NotesByCategoryActivity : AppCompatActivity() {
 
         // Muestra el título de la categoría seleccionada
         val categoryTitle: TextView = findViewById(R.id.categoryTitle)
-        categoryTitle.text = "Notas en la categoría: $selectedCategory"
+        categoryTitle.text = "Categoría: $selectedCategory"
     }
 }

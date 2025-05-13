@@ -12,7 +12,9 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 class UpdateNoteActivity : AppCompatActivity() {
 
@@ -91,20 +93,26 @@ class UpdateNoteActivity : AppCompatActivity() {
             btnUpdate.setOnClickListener {
                 val updatedTitle = etTitle.text.toString()
                 val updatedContent = etContent.text.toString()
-                val updatedDate = etDate.text.toString()
+                val updatedDate = etDate.text.toString()  // Aquí asignamos la fecha correcta
                 val updatedCategory = spinnerCategory.selectedItem?.toString() ?: "Categoría desconocida"
                 val updatedIsFavorite = checkBoxFavorite.isChecked
 
                 if (updatedTitle.isNotEmpty() && updatedContent.isNotEmpty()) {
+                    // Formatear la fecha antes de guardarla
+                    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                    val parsedDate = try { sdf.parse(updatedDate) } catch (e: Exception) { null }
+                    val formattedDate = parsedDate?.let { sdf.format(it) } ?: updatedDate  // Si falla, usa la fecha original
+
                     // Crear un objeto Note con los valores actualizados
                     val updatedNote = Note(
                         noteId,  // ID de la nota original
                         updatedTitle,
                         updatedContent,
-                        updatedDate,
+                        formattedDate,  // Se guarda la fecha con el formato correcto
                         updatedCategory,
                         updatedIsFavorite
                     )
+
                     dbHelper.updateNote(updatedNote)  // Pasar el objeto Note
                     Toast.makeText(this, "Nota actualizada", Toast.LENGTH_SHORT).show()
                     finish()

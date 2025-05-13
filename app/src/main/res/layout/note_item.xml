@@ -16,6 +16,7 @@
     android:id="@+id/tvTitle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:fontFamily="@font/sourgummy_medium"
     android:text="Título"
     android:textSize="18sp"
     android:textStyle="bold" />
@@ -25,6 +26,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Contenido"
+    android:fontFamily="@font/delius_regular"
     android:textSize="16sp"
     android:layout_marginTop="4dp"
     android:maxLines="2"

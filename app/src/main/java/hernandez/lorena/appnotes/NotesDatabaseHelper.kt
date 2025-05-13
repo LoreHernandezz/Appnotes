@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.content.Context
+import android.util.Log
 
 class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -81,6 +82,9 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             put(COLUMN_CATEGORY, note.category)
             put(COLUMN_FAVORITE, if (note.isFavorite) 1 else 0)
         }
+
+        Log.d("Notas", "Actualizando nota ID: ${note.id}, Nueva fecha: ${note.date}")
+
         val whereClause = "$COLUMN_ID = ?"
         val whereArgs = arrayOf(note.id.toString())
         db.update(TABLE_NAME, values, whereClause, whereArgs)

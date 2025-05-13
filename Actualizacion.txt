@@ -6,6 +6,9 @@ Actualizaciones
 - Se agregaron nuevos parámetros de la base de datos
 - Se agregó la función de vista de calendario
 - Se agregaron carpetas que muestran notas que pertenecen a esas categorías
+- Se corrigió el error del calendario, (no actualizaba cambios de ediciones)
+- Se agrego logo app
+- Cambio de fuentes
 
 
 

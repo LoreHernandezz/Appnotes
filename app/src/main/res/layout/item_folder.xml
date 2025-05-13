@@ -18,6 +18,7 @@
         android:id="@+id/folderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/sourgummy_medium"
         android:text="Escuela"
         android:textColor="@color/soft_purple"
         android:textSize="14sp"

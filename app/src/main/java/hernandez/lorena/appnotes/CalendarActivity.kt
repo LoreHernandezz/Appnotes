@@ -1,6 +1,7 @@
 package hernandez.lorena.appnotes
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.CalendarView
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +20,7 @@ class CalendarActivity : AppCompatActivity() {
     private lateinit var notesAdapter: NotesAdapter
     private lateinit var db: NotesDatabaseHelper
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,6 +31,8 @@ class CalendarActivity : AppCompatActivity() {
         btnBack.setOnClickListener {
             finish()
         }
+
+
 
         // Inicializar vistas
         calendarView = findViewById(R.id.calendarView)
@@ -59,6 +63,19 @@ class CalendarActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val currentDate = getDateString(calendarView.date)
+
+        db = NotesDatabaseHelper(this)  // Asegurar que la instancia de la base de datos esté actualizada
+        val todasLasNotas = db.getAllNotes()  // Obtener las notas más recientes
+        val notasDelDia = todasLasNotas.filter { it.date == currentDate }
+
+        Log.d("Notas", "Notas actualizadas al abrir el calendario: $notasDelDia")
+
+        notesAdapter.updateNotes(notasDelDia)  // Asegurar que el adaptador reciba la versión más reciente
+    }
+
     private fun getDateString(timeInMillis: Long): String {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return sdf.format(Date(timeInMillis))
@@ -66,9 +83,18 @@ class CalendarActivity : AppCompatActivity() {
 
     private fun mostrarNotas(fecha: String) {
         val todasLasNotas = db.getAllNotes()
-        val notasDelDia = todasLasNotas.filter { it.date == fecha }
+        Log.d("Notas", "Fecha recibida para filtrar: $fecha")
+        Log.d("Notas", "Todas las notas antes de filtrar: $todasLasNotas")
 
-        // Actualizar el adapter con la lista filtrada
+        val notasDelDia = todasLasNotas.filter {
+            Log.d("Notas", "Comparando '${it.date}' con '$fecha'")
+            it.date?.trim() == fecha.trim()
+        }
+
+
+
+        Log.d("Notas", "Notas filtradas con fecha '$fecha': $notasDelDia")
+
         notesAdapter.updateNotes(notasDelDia)
     }
 }
