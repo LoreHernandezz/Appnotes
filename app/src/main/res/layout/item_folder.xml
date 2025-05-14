@@ -21,7 +21,7 @@
         android:fontFamily="@font/sourgummy_medium"
         android:text="Escuela"
         android:textColor="@color/soft_purple"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:gravity="center"
         android:layout_marginTop="4dp" />
 

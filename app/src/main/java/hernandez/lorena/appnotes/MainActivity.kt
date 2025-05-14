@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var allNotes: MutableList<Note>
     private var isAscending = true
 
-    // Hacer categories y foldersAdapter propiedades globales
     private val categories = listOf("Escuela", "Trabajo", "Personal", "Otra")
     private lateinit var foldersAdapter: FoldersAdapter
 
@@ -40,17 +39,27 @@ class MainActivity : AppCompatActivity() {
         val foldersRecyclerView = findViewById<RecyclerView>(R.id.foldersRecyclerView)
         foldersRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
-        // Inicializar foldersAdapter
-        val folderList = categories.map { category ->
+        val folderList = mutableListOf<Folder>()
+
+        categories.filter { it != "Favoritos" }.forEach { category ->
             val count = allNotes.count { it.category == category }
-            Folder(category, count)
+            folderList.add(Folder(category, count))
         }
+
+        val favoritesCount = allNotes.count { it.isFavorite }
+        folderList.add(Folder("Favoritos", favoritesCount))
 
         foldersAdapter = FoldersAdapter(folderList) { selectedFolder ->
             val category = selectedFolder.name
-            val intent = Intent(this, NotesByCategoryActivity::class.java)
-            intent.putExtra("category", category)
-            startActivity(intent)
+            if (category == "Favoritos") {
+                val intent = Intent(this, NotesByCategoryActivity::class.java)
+                intent.putExtra("favoritesOnly", true) // marcador especial
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, NotesByCategoryActivity::class.java)
+                intent.putExtra("category", category)
+                startActivity(intent)
+            }
         }
 
         foldersRecyclerView.adapter = foldersAdapter
@@ -71,7 +80,6 @@ class MainActivity : AppCompatActivity() {
             sortNotes()
         }
 
-        // Búsqueda por título
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -98,36 +106,40 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Recalcular todas las notas
         allNotes = db.getAllNotes().toMutableList()
-        notesAdapter.refreshData(allNotes)  // Actualiza el adaptador de notas con la nueva lista de notas
+        notesAdapter.refreshData(allNotes)
 
-        // Recalcular las carpetas
-        val folderList = categories.map { category ->
+        val folderList = mutableListOf<Folder>()
+
+        categories.forEach { category ->
             val count = allNotes.count { it.category == category }
-            Folder(category, count)
+            folderList.add(Folder(category, count))
         }
 
-        // Actualizar el adaptador de carpetas y notificar que los datos han cambiado
+        val favoritesCount = allNotes.count { it.isFavorite }
+        folderList.add(Folder("Favoritos", favoritesCount))
+
         foldersAdapter.updateFolderList(folderList)
     }
 
     private fun deleteNote(note: Note) {
-        db.deleteNote(note.id)  // Eliminar la nota de la base de datos
-        allNotes.remove(note)   // Eliminar la nota de la lista de notas
+        db.deleteNote(note.id)
+        allNotes.remove(note)
 
-        // Actualizar las carpetas después de la eliminación
-        val folderList = categories.map { category ->
+        val folderList = mutableListOf<Folder>()
+
+        categories.forEach { category ->
             val count = allNotes.count { it.category == category }
-            Folder(category, count)
+            folderList.add(Folder(category, count))
         }
 
-        // Actualizar el adaptador de carpetas con la nueva lista
-        foldersAdapter.updateFolderList(folderList)
+        val favoritesCount = allNotes.count { it.isFavorite }
+        folderList.add(Folder("Favoritos", favoritesCount))
 
-        // Actualizar el adaptador de notas
+        foldersAdapter.updateFolderList(folderList)
         notesAdapter.refreshData(allNotes)
     }
+
 
     private fun sortNotes() {
         if (isAscending) {

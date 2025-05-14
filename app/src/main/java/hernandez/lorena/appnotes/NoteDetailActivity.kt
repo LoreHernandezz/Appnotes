@@ -18,7 +18,7 @@ class NoteDetailActivity : AppCompatActivity() {
         binding = ActivityNoteDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Obtener datos del intent
+
         val title = intent.getStringExtra("note_title")
         val content = intent.getStringExtra("note_content")
         val date = intent.getStringExtra("note_date")
@@ -27,7 +27,7 @@ class NoteDetailActivity : AppCompatActivity() {
 
         Log.d("NoteDetailActivity", "Received data - Title: $title, Content: $content, Date: $date, Category: $category, Favorite: $isFavorite")
 
-        // Mostrar datos
+
         binding.tvBackPrincipal.text = title
         binding.tvDetailContent.text = content
         binding.tvDetailDate.text = "Fecha: ${date ?: "Sin fecha"}"

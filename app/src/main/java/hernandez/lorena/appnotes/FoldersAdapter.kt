@@ -28,10 +28,11 @@ class FoldersAdapter(private var folderList: List<Folder>, private val onFolderC
     override fun onBindViewHolder(holder: FolderViewHolder, position: Int) {
         val folder = folderList[position]
 
-        val imageResId = if (folder.noteCount > 0) {
-            R.drawable.llena // Asegúrate de tener esta imagen en drawable
-        } else {
-            R.drawable.carpeta // Asegúrate de tener esta imagen en drawable
+        val imageResId = when {
+            folder.name == "Favoritos" && folder.noteCount > 0 -> R.drawable.llena
+            folder.name == "Favoritos" -> R.drawable.carpeta
+            folder.noteCount > 0 -> R.drawable.llena
+            else -> R.drawable.carpeta
         }
 
         holder.folderImage.setImageResource(imageResId)

@@ -35,7 +35,7 @@
         android:text="Editar nota"
         android:fontFamily="@font/sourgummy_medium"
         android:textColor="@color/soft_purple"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@+id/etTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

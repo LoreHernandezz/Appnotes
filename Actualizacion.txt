@@ -9,6 +9,7 @@ Actualizaciones
 - Se corrigió el error del calendario, (no actualizaba cambios de ediciones)
 - Se agrego logo app
 - Cambio de fuentes
+- Se agregó carpeta para favoritos
 
 
 

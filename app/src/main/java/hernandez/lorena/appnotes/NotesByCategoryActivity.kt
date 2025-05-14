@@ -14,6 +14,7 @@ class NotesByCategoryActivity : AppCompatActivity() {
     private lateinit var allNotes: MutableList<Note>
     private lateinit var db: NotesDatabaseHelper
     private var selectedCategory: String? = null
+    private var showFavoritesOnly: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,23 +27,26 @@ class NotesByCategoryActivity : AppCompatActivity() {
 
         db = NotesDatabaseHelper(this)
 
-        // Recupera la categoría seleccionada desde el Intent
-        selectedCategory = intent.getStringExtra("category")
-
-        // Obtén todas las notas de la base de datos
+        showFavoritesOnly = intent.getBooleanExtra("favoritesOnly", false)
         allNotes = db.getAllNotes().toMutableList()
 
-        // Filtra las notas por la categoría seleccionada
-        val notesInCategory = allNotes.filter { it.category == selectedCategory }.toMutableList()
+        val notesToDisplay = if (showFavoritesOnly) {
+            allNotes.filter { it.isFavorite }.toMutableList()
+        } else {
+            selectedCategory = intent.getStringExtra("category")
+            allNotes.filter { it.category == selectedCategory }.toMutableList()
+        }
 
-        // Configura el RecyclerView
         notesRecyclerView = findViewById(R.id.notesRecyclerView)
         notesRecyclerView.layoutManager = LinearLayoutManager(this)
-        notesAdapter = NotesAdapter(this, notesInCategory)
+        notesAdapter = NotesAdapter(this, notesToDisplay)
         notesRecyclerView.adapter = notesAdapter
 
-        // Muestra el título de la categoría seleccionada
         val categoryTitle: TextView = findViewById(R.id.categoryTitle)
-        categoryTitle.text = "Categoría: $selectedCategory"
+        categoryTitle.text = if (showFavoritesOnly) {
+            "Favoritos "
+        } else {
+            "Categoría: $selectedCategory"
+        }
     }
 }

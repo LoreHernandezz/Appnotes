@@ -79,17 +79,12 @@ class UpdateNoteActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerCategory.adapter = adapter
 
-
-            // Obtener la posición de la categoría de la nota
             val categoryPosition = categoriesList.indexOf(note.category)
 
-            // Si la categoría existe en la lista, selecciona la posición correcta
             if (categoryPosition != -1) {
                 spinnerCategory.setSelection(categoryPosition)
             }
 
-
-            // Manejo de clic en el botón de guardar
             btnUpdate.setOnClickListener {
                 val updatedTitle = etTitle.text.toString()
                 val updatedContent = etContent.text.toString()
@@ -98,17 +93,15 @@ class UpdateNoteActivity : AppCompatActivity() {
                 val updatedIsFavorite = checkBoxFavorite.isChecked
 
                 if (updatedTitle.isNotEmpty() && updatedContent.isNotEmpty()) {
-                    // Formatear la fecha antes de guardarla
                     val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                     val parsedDate = try { sdf.parse(updatedDate) } catch (e: Exception) { null }
                     val formattedDate = parsedDate?.let { sdf.format(it) } ?: updatedDate  // Si falla, usa la fecha original
 
-                    // Crear un objeto Note con los valores actualizados
                     val updatedNote = Note(
                         noteId,  // ID de la nota original
                         updatedTitle,
                         updatedContent,
-                        formattedDate,  // Se guarda la fecha con el formato correcto
+                        formattedDate,
                         updatedCategory,
                         updatedIsFavorite
                     )
@@ -121,7 +114,6 @@ class UpdateNoteActivity : AppCompatActivity() {
                 }
             }
 
-            // Manejo de clic en el botón de cancelar
             btnCancel.setOnClickListener {
                 AlertDialog.Builder(this)
                     .setTitle("Cancelar edición")

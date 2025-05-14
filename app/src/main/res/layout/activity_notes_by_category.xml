@@ -25,7 +25,7 @@
         android:text="Categoría: "
         android:fontFamily="@font/sourgummy_medium"
         android:textColor="@color/soft_purple"
-        android:textSize="18sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:layout_below="@id/btnCancel"
         android:layout_marginBottom="16dp" />
